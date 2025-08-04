@@ -1,0 +1,101 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  overflow-x: hidden;
+  font-family: var(--font-family);
+  background-color: var(--color-white);
+}
+
+:root {
+  /* Colors: Base  */
+  --color-white: #fff;
+  --color-black: #323232;
+
+  /* Theme Colors  */
+  --color-primary: #c90000;
+  --color-primary-dark: #b10202;
+  --color-accent: #ffc300;
+  --color-success: #28a745;
+  --color-error: #dc3545;
+
+  /* Text colors */
+  --color-text-main: #504f4f;
+  --color-text-muted: #7d7c7c;
+  --color-text-dark: #333;
+
+  /* Backgrounds */
+  --color-bg-light: #f1f1f1;
+  --color-bg-lighter: #e3e3e3;
+  --color-bg-highlight: #fff6a3;
+  --color-bg-soft-yellow: #fffde6;
+  --color-bg-modal: rgba(0, 0, 0, 0.8);
+  --bg-table-header: #f5f5f5;
+  --color-bg-auth: #f4f7f6;
+
+  /* Border / Transparent */
+  --color-border-light: rgba(241, 241, 241, 0.7);
+  --color-border-lighter: rgba(241, 241, 241, 0.4);
+  --color-border-muted: #7d7c7c;
+  --color-hover-light: rgba(112, 144, 176, 0.2);
+  --color-border-table: rgb(235, 237, 240);
+  --color-border-table-light: rgb(235, 237, 240);
+  --color-border-modal: #888;
+  --color-border-auth: #ddd;
+  --color-border-dark: #7090b033;
+  --color-border-darker: rgba(58, 61, 66, 0.06);
+
+  /* button colors */
+  --color-btn-light: #e0e0e2;
+
+  /* 🖋 Typography */
+  --font-family: "poppins", sans-serif;
+
+  /*Box shadow */
+  --shadow-light: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  --shadow-dark: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  --shadow-product: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  --shadow-light-dark: rgba(0, 0, 0, 0.16) 0px 3px 6px;
+  --shadow-notification: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  --shadow-auth-form: 0px 0px 5px rgba(0, 128, 0, 0.3);
+  --shadow-auth-form-dark: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+@font-face {
+  font-family: poppins;
+  font-style: normal;
+  font-weight: 900;
+  src: url("../fonts/poppins/poppins-bold-webfont.woff") format("woff");
+}
+@font-face {
+  font-family: poppins;
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/poppins/poppins-bold-webfont.woff") format("woff");
+}
+@font-face {
+  font-family: poppins;
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/poppins/poppins-medium-webfont.woff") format("woff");
+}
+@font-face {
+  font-family: poppins;
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/poppins/poppins-semibold-webfont.woff") format("woff");
+}
+@font-face {
+  font-family: poppins;
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/poppins/poppins-regular-webfont.woff") format("woff");
+}
+@font-face {
+  font-family: poppins;
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/poppins/poppins-light-webfont.woff") format("woff");
+}

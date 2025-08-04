@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Mc Donald’s</title>
+    <link rel="icon" type="image/x-icon" href="pic/lgo.ico" />
+  </head>
+  <body>
+    <!---------------------------------------- هدر ----------------------------------------------------->
+
+    <header class="site-header" id="site-header">
+      <div class="site-header__content container">
+        <!-- لوگو -->
+        <div class="logo-box">
+          <img src="pic/lgo.png" alt="Logo" />
+        </div>
+
+        <!-- منوی دسکتاپ -->
+        <nav class="nav-desktop" id="main-menu">
+          <ul>
+            <li>
+              <a href="https://www.google.com" target="_blank">Homepage</a>
+            </li>
+            <li><a href="#" target="_blank">Menu</a></li>
+            <li><a href="#" target="_blank">Sale off</a></li>
+            <li><a href="#" target="_blank">News</a></li>
+            <li><a href="#" target="_blank">Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- دکمه‌های ورود و ثبت‌نام -->
+        <div class="header__auth-buttons">
+          <!-- دکمه ثبت نام -->
+          <button class="btn--outline" id="btn-signin">
+            <a href="register.html" target="_blank">Sign in</a>
+          </button>
+
+          <!-- دکمه ورود -->
+          <button class="btn--fill" id="btn-login">
+            <a href="login.html" target="_blank">Log in</a>
+          </button>
+
+          <!-- پروفایل -->
+          <div id="user-section">
+            <!-- نمایش منوی کاربر لاگین‌شده -->
+          </div>
+
+          <button class="btn-cart" id="cart-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+              />
+            </svg>
+            <span id="cart-count">0</span>
+          </button>
+        </div>
+
+        <!-- دکمه باز کردن منوی برگر -->
+        <div class="nav__burger-toggle">
+          <button class="nav__toggle-btn" id="open-menu">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 5.25h16.5M3.75 12h16.5M3.75 18.75h16.5"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="header__search container">
+        <form id="form" class="form-search">
+          <input type="search" id="search-input" placeholder="saerch..." />
+          <button type="submit">search</button>
+        </form>
+        <p id="searchQuery"></p>
+      </div>
+      <!-------------------------------------------------- modal -------------------------------------------------->
+      <div class="modal" id="modal">
+        <div class="modal-body">
+          <div class="modal__header">
+            <h2>سبد خرید</h2>
+            <span class="modal-close" id="close-cart">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="3"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </span>
+          </div>
+          <table class="table-cart">
+            <thead>
+              <tr>
+                <th>تصویر</th>
+                <th>نام</th>
+                <th>قیمت</th>
+                <th>تعداد</th>
+                <th>مجموع</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody id="cart-items">
+              <tr>
+                <td>تصویر</td>
+                <td>نام</td>
+                <td>قیمت</td>
+                <td class="quantity-controls">
+                  <div>
+                    <button type="button">-</button>
+                    0 <button type="button">+</button>
+                  </div>
+                </td>
+                <td>مجموع</td>
+                <td>
+                  <button class="removeFromCart">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="footer-total">
+            <div class="cart-total" id="cart-total">total:123</div>
+
+            <button id="checkout-button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z"
+                />
+              </svg>
+
+              تکمیل سفارش
+            </button>
+          </div>
+
+          <p class="footer-note" id="login-reminder">
+            لطفا برای تکمیل سفارش به سایت لاگین کنید
+          </p>
+        </div>
+      </div>
+      <!---------------------------------------- منوی موبایل ----------------------------------------------------->
+      <nav class="nav--mobile" id="burger-menu">
+        <!-- دکمه بستن منو -->
+        <button class="nav__toggle-btn" id="close-menu">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18 18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
+        <!-- لیست منو توسط JS وارد می‌شود -->
+        <ul></ul>
+      </nav>
+    </header>
+
+    <main>
+      <!-- تصویر و توضیحات -->
+      <div class="content container">
+        <div class="main-content">
+          <div class="main-content-heading">
+            <h1>Order your favourite food</h1>
+            <p>
+              Hamburger has many flavors, have you tried Cheese Beef Hamburger?
+            </p>
+            <button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                />
+              </svg>
+              <span>Order now</span>
+            </button>
+          </div>
+        </div>
+        <div class="main-content-picture">
+          <img src="pic/Group 15.png" alt="burger" />
+        </div>
+      </div>
+
+      <!--------------------------------------------------  محصولات -------------------------------------------------->
+
+      <div class="products-wrapper container">
+        <!---------------------------------- محصولات براساس منطقه جغرافیایی ---------------------------------------->
+        <div class="region-section">
+          <h2>Menu</h2>
+          <hr />
+          <div class="region-filters">
+            <div data-region="Chinese">
+              <img src="pic/china.png" alt="china" />china
+            </div>
+            <div data-region="Spanish">
+              <img src="./pic/spania.png" alt="spania" />spania
+            </div>
+            <div data-region="Italian">
+              <img src="./pic/italy.png" alt="italy" />italy
+            </div>
+            <div data-region="Japanese">
+              <img src="./pic/Japan.png" alt="Japan" />Japan
+            </div>
+            <div data-region="Canadian">
+              <img src="./pic/canada.png" alt="canada" />canada
+            </div>
+            <div data-region="French">
+              <img src="./pic/france.png" alt="france" />france
+            </div>
+          </div>
+        </div>
+
+        <!--------------------------------------------------------- لیست محصولات ----------------------------------->
+        <div class="product-list" id="product-list">
+          <!--------------------------------------------------- محصول --------------------------------------------->
+
+          <!-------- نمایش محصولات -------->
+        </div>
+      </div>
+      <!--------------------------------------------------------- لیست علاقه مندی محصولات ---------------------------->
+      <div class="favorites-section container">
+        <div class="favourite-list">
+          <h3>favourite</h3>
+          <hr />
+          <!--------------------------------------------------------محصولات مورد علاقه------------------------->
+          <div class="favourite-products">
+            <!-- محصول -->
+            <div class="product-card">
+              <!-- عکس محصول-->
+              <img src="pic/13 (1).png" alt="" />
+
+              <!-- اسم + توضیحات محصول-->
+              <div class="product-info">
+                <h3 class="product-title">Hamburger Cheese Beef Hamburger</h3>
+              </div>
+            </div>
+
+            <!-- محصول -->
+            <div class="product-card">
+              <!-- عکس محصول-->
+              <img src="pic/13 (2).png" alt="" />
+
+              <!-- اسم + توضیحات محصول-->
+              <div class="product-info">
+                <h3 class="product-title">Hamburger Cheese Beef Hamburger</h3>
+              </div>
+            </div>
+
+            <!-- محصول -->
+            <div class="product-card">
+              <!-- عکس محصول-->
+              <img src="pic/2.png" alt="" />
+
+              <!-- اسم + توضیحات محصول-->
+              <div class="product-info">
+                <h3 class="product-title">Hamburger Cheese Beef Hamburger</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--------------------------------------------------------- پیام های سبد خرید-نوتیفیکیشن--------------------------->
+
+      <div id="notification" class="hidden"></div>
+    </main>
+    <!---------------------------------------- فوتر----------------------------------------------------->
+    <footer>
+      <div class="footer-content container">
+        <div class="footer-grid">
+          <div class="footer-logo-box">
+            <div class="footer-logo">
+              <img src="pic/lgo.png" alt="" />
+              <h6>Mc Donald’s</h6>
+            </div>
+            <ul>
+              <li>
+                <a href="" target="_blank"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="100"
+                    height="100"
+                    viewBox="0 0 50 50"
+                    class="social_app"
+                  >
+                    <path
+                      d="M 50.0625 10.4375 C 48.214844 11.257813 46.234375 11.808594 44.152344 12.058594 C 46.277344 10.785156 47.910156 8.769531 48.675781 6.371094 C 46.691406 7.546875 44.484375 8.402344 42.144531 8.863281 C 40.269531 6.863281 37.597656 5.617188 34.640625 5.617188 C 28.960938 5.617188 24.355469 10.21875 24.355469 15.898438 C 24.355469 16.703125 24.449219 17.488281 24.625 18.242188 C 16.078125 17.8125 8.503906 13.71875 3.429688 7.496094 C 2.542969 9.019531 2.039063 10.785156 2.039063 12.667969 C 2.039063 16.234375 3.851563 19.382813 6.613281 21.230469 C 4.925781 21.175781 3.339844 20.710938 1.953125 19.941406 C 1.953125 19.984375 1.953125 20.027344 1.953125 20.070313 C 1.953125 25.054688 5.5 29.207031 10.199219 30.15625 C 9.339844 30.390625 8.429688 30.515625 7.492188 30.515625 C 6.828125 30.515625 6.183594 30.453125 5.554688 30.328125 C 6.867188 34.410156 10.664063 37.390625 15.160156 37.472656 C 11.644531 40.230469 7.210938 41.871094 2.390625 41.871094 C 1.558594 41.871094 0.742188 41.824219 -0.0585938 41.726563 C 4.488281 44.648438 9.894531 46.347656 15.703125 46.347656 C 34.617188 46.347656 44.960938 30.679688 44.960938 17.09375 C 44.960938 16.648438 44.949219 16.199219 44.933594 15.761719 C 46.941406 14.3125 48.683594 12.5 50.0625 10.4375 Z"
+                    ></path>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href="" target="_blank"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="100"
+                    height="100"
+                    viewBox="0 0 50 50"
+                    class="social_app"
+                  >
+                    <path
+                      d="M25,3C12.85,3,3,12.85,3,25c0,11.03,8.125,20.137,18.712,21.728V30.831h-5.443v-5.783h5.443v-3.848 c0-6.371,3.104-9.168,8.399-9.168c2.536,0,3.877,0.188,4.512,0.274v5.048h-3.612c-2.248,0-3.033,2.131-3.033,4.533v3.161h6.588 l-0.894,5.783h-5.694v15.944C38.716,45.318,47,36.137,47,25C47,12.85,37.15,3,25,3z"
+                    ></path>
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href="" target="_blank"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="100"
+                    height="100"
+                    viewBox="0 0 24 24"
+                    class="social_app"
+                  >
+                    <path
+                      d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M7.738,17L7.738,17 c-0.697,0-1.262-0.565-1.262-1.262v-4.477C6.477,10.565,7.042,10,7.738,10h0C8.435,10,9,10.565,9,11.262v4.477 C9,16.435,8.435,17,7.738,17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2 S8.551,8.717,7.694,8.717z M16.779,17L16.779,17c-0.674,0-1.221-0.547-1.221-1.221v-2.605c0-1.058-0.651-1.174-0.895-1.174 s-1.058,0.035-1.058,1.174v2.605c0,0.674-0.547,1.221-1.221,1.221h-0.081c-0.674,0-1.221-0.547-1.221-1.221v-4.517 c0-0.697,0.565-1.262,1.262-1.262h0c0.697,0,1.262,0.565,1.262,1.262c0,0,0.282-1.262,2.198-1.262C17.023,10,18,10.977,18,13.174 v2.605C18,16.453,17.453,17,16.779,17z"
+                    ></path>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h5>USEFUL LINKS</h5>
+            <ul>
+              <li><a href="#">Homepage</a></li>
+              <li><a href="#">Menu</a></li>
+              <li><a href="#">Sale off</a></li>
+              <li><a href="#">News</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h5>OPENING HOUR</h5>
+            <ul>
+              <li>Monday - Friday:9:00 - 23:00h</li>
+              <li>Saturday:09:00 - 16:00h</li>
+              <li>Sunday:12:00 - 18:00h</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="js/script.js"></script>
+  </body>
+</html>
