@@ -593,7 +593,6 @@ main {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  flex-direction: row-reverse;
   background-color: var(--color-primary);
   padding: 15px;
   color: var(--color-white);
