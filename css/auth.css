@@ -145,3 +145,10 @@ input[type="password"] {
 #notification.error {
   background-color: var(--color-error); /* رنگ قرمز برای خطاها */
 }
+
+@media screen and (max-width: 834px) {
+  .login_container,
+  .register_container {
+    width: 100%;
+  }
+}
