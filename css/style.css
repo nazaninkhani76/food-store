@@ -807,13 +807,20 @@ footer {
     width: 80%;
     padding: 40px 20px;
     height: 100vh;
-    position: absolute;
+    /* position: absolute; */
+    position: fixed;
+
     top: 0%;
     left: 0%;
     display: none;
     box-shadow: var(--shadow-light);
     z-index: 1000;
   }
+
+  body.no-scroll {
+    overflow: hidden;
+  }
+
   .nav--mobile.active {
     display: block;
   }

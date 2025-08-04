@@ -224,11 +224,13 @@ burgerMenuList.innerHTML = mainMenu.innerHTML;
 // باز کردن منوی موبایل
 openMenu.addEventListener("click", () => {
   burgerMenu.classList.add("active");
+  document.body.classList.add("no-scroll"); // اسکرول صفحه غیر فعال می‌شود
 });
 
 // بستن منوی موبایل
 closeMenu.addEventListener("click", () => {
   burgerMenu.classList.remove("active");
+  document.body.classList.remove("no-scroll"); // اسکرول صفحه فعال می‌شود
 });
 // ------------------------------------------------------ سبدخرید--------------------------------------------------------------------
 cartIcon.addEventListener("click", () => {
