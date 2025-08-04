@@ -26,10 +26,11 @@ function loadFromLocalStorage() {
 
 // اعتبارسنجی نام کاربری (حداقل 4 کاراکتر انگلیسی)
 function validUsername(username) {
-  const usernameRegex = /^[a-zA-Z]{4,}$/;
+  const usernameRegex = /^[a-zA-Z][a-zA-Z0-9._-]{3,19}$/;
+
   if (!usernameRegex.test(username)) {
     showNotification(
-      "Please fill your username input with at least 4 English letters.",
+      "Username must be 4-20 characters, start with a letter, and only contain letters, numbers, dots (.), dashes (-), or underscores (_).",
       "error"
     );
     return false;
