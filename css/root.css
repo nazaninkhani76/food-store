@@ -12,7 +12,8 @@ body {
 :root {
   /* Colors: Base  */
   --color-white: #fff;
-  --color-black: #323232;
+  --color-dark: #323232;
+  --color-black: #000;
 
   /* Theme Colors  */
   --color-primary: #c90000;

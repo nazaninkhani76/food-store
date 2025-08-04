@@ -109,6 +109,7 @@ a {
 .btn-cart svg {
   width: 30px;
   height: 30px;
+  color: var(--color-black);
 }
 #cart-count {
   border-radius: 50%;
@@ -177,6 +178,7 @@ a {
 .user-logout > button > svg {
   width: 24px;
   height: 24px;
+  color: var(--color-black);
 }
 .user-logout > button:hover {
   color: var(--color-primary);
@@ -294,6 +296,7 @@ a {
 .main-content-heading > button > svg {
   width: 20px;
   height: 20px;
+  color: var(--color-black);
 }
 
 /* محصولات */
@@ -599,10 +602,11 @@ main {
 .modal-close > svg {
   width: 24px;
   height: 24px;
+  color: var(--color-white);
 }
 .modal-close:hover,
 .modal-close:focus {
-  color: var(--color-black);
+  color: var(--color-dark);
   text-decoration: none;
   cursor: pointer;
 }
@@ -684,15 +688,17 @@ main {
   width: 100%;
 }
 #checkout-button {
-  display: block;
+  /* display: block; */
   /* background-color: var(--color-bg-lighter); */
   color: var(--color-success);
   font-size: 12px;
   padding: 10px 15px;
   font-weight: 500;
   margin-top: 10px;
-  /* display: flex;
-  align-items: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 #checkout-button svg {
   width: 20px;
@@ -753,7 +759,7 @@ footer {
   padding: 1rem;
 }
 .footer-links ul li {
-  color: var(--color-black);
+  color: var(--color-dark);
   font-size: 16px;
   font-weight: 300;
   line-height: 36px;
@@ -763,7 +769,7 @@ footer {
   color: inherit;
 }
 .footer-links h5 {
-  color: var(--color-black);
+  color: var(--color-dark);
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 10px;
