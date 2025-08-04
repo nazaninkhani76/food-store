@@ -804,7 +804,7 @@ footer {
   }
   .nav--mobile {
     background-color: var(--color-bg-lighter);
-    width: 50%;
+    width: 80%;
     padding: 40px 20px;
     height: 100vh;
     position: absolute;
