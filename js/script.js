@@ -37,17 +37,37 @@ async function getFetchProduct() {
   }
 }
 // ------------------------------------------------------ قسمت علاقه مندی ---------------------------------------------------
+// ذخیره‌سازی در localStorage
+function saveFavListToLocalStorage() {
+  localStorage.setItem("favourite", JSON.stringify(FavouriteList));
+}
+
+// بارگذاری داده‌ها از localStorage
+function loadFavListFromLocalStorage() {
+  /** 
+ * const load = localStorage.getItem("favourite");
+    if (load) {
+      users = JSON.parse(load);
+      console.log(result);
+    } else {
+      users = [];
+    }
+*/
+  FavouriteList = JSON.parse(localStorage.getItem("favourite")) || [];
+}
 // add to fav
 function addToFavourite(product) {
   if (!FavouriteList.some((p) => p.id === product.id)) {
     FavouriteList.push(product);
     updateFavoriteList();
+    saveFavListToLocalStorage();
   }
 }
 // remove from fav
 function removeFromFavourite(id) {
   FavouriteList = FavouriteList.filter((p) => p.id !== id);
   updateFavoriteList();
+  saveFavListToLocalStorage();
 }
 
 // update
@@ -68,7 +88,7 @@ function updateFavoriteList() {
             </div>`;
     favProducts.innerHTML += favItem;
   });
-  console.log("لیست علاقه مندی", FavouriteList);
+  // console.log("لیست علاقه مندی", FavouriteList);
 }
 // like & unlike
 document.addEventListener("click", (e) => {
@@ -101,11 +121,17 @@ document.addEventListener("click", (e) => {
 function displayFood(meals) {
   productList.innerHTML = "";
   meals.forEach((meal) => {
-    const mealItem = `
-             <div class="product-card" data-id="${meal.idMeal}">
+    const isFav = FavouriteList.some((p) => p.id === meal.idMeal);
 
-            <!-- لایک -->
-            <span class="heart-icon unliked">🤍</span>
+    // تعیین کلاس آیکون لایک/دیسلایک
+    const heartIconClass = isFav ? "❤️" : "🤍";
+
+    // ایجاد آیتم محصول
+    const mealItem = `
+      <div class="product-card" data-id="${meal.idMeal}" id="product-card">
+        
+        <!-- لایک -->
+<span class="heart-icon ${isFav ? "" : "unliked"}">${heartIconClass}</span>
 
             <!-- عکس محصول-->
             <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
@@ -406,6 +432,7 @@ function showNotification(message, type = "success") {
 
 window.addEventListener("load", () => {
   getFetchProduct();
+  loadFavListFromLocalStorage();
   manageAuth();
   updateFavoriteList();
 });
