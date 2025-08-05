@@ -278,6 +278,7 @@ if (searchInput) {
   searchInput.addEventListener("input", () => {
     if (searchInput.value.trim() === "") {
       searchResultEl.textContent = "";
+      searchResultEl.classList.remove("show");
     }
   });
 }
