@@ -1,5 +1,6 @@
 // آدرس API غذاها از سایت themealdb
 const apiUrl = "https://www.themealdb.com/api/json/v1/1/";
+const notification = document.querySelector("#notification");
 const openMenu = document.querySelector("#open-menu");
 const closeMenu = document.querySelector("#close-menu");
 const burgerMenu = document.querySelector("#burger-menu");
@@ -15,6 +16,7 @@ const authSection = document.querySelector("#user-section");
 const searchInput = document.querySelector("#search-input");
 
 let mealData = [];
+let FavouriteList = [];
 // ------------------------------------------------------ تابع دریافت غذاها از API ------------------------------------------------------
 async function getFetchProduct() {
   try {
@@ -34,14 +36,76 @@ async function getFetchProduct() {
     console.log("Error:", error);
   }
 }
+// ------------------------------------------------------ قسمت علاقه مندی ---------------------------------------------------
+// add to fav
+function addToFavourite(product) {
+  if (!FavouriteList.some((p) => p.id === product.id)) {
+    FavouriteList.push(product);
+    updateFavoriteList();
+  }
+}
+// remove from fav
+function removeFromFavourite(id) {
+  FavouriteList = FavouriteList.filter((p) => p.id !== id);
+  updateFavoriteList();
+}
+
+// update
+function updateFavoriteList() {
+  const favProducts = document.querySelector("#fav-products");
+  favProducts.innerHTML = "";
+
+  FavouriteList.forEach((product) => {
+    const favItem = `<!-- محصول -->
+            <div class="product-card">
+              <!-- عکس محصول-->
+              <img src="${product.image}" alt="${product.title}" />
+
+              <!-- اسم + توضیحات محصول-->
+              <div class="product-info">
+                <h3 class="product-title">${product.title}</h3>
+              </div>
+            </div>`;
+    favProducts.innerHTML += favItem;
+  });
+  console.log("لیست علاقه مندی", FavouriteList);
+}
+// like & unlike
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("heart-icon")) {
+    console.log("heart icon clicked");
+    const heartIcon = e.target;
+    const productaCard = heartIcon.closest(".product-card");
+    const product = {
+      title: productaCard.querySelector("h3").textContent,
+      image: productaCard.querySelector("img").src,
+      id: productaCard.dataset.id,
+    };
+    // console.log(productaCard);
+    if (heartIcon.classList.contains("unliked")) {
+      heartIcon.classList.remove("unliked");
+      heartIcon.innerHTML = "❤️";
+      addToFavourite(product);
+      showNotification(`${product.title} add to Favourite List`);
+      // showNotification("add to Favourite List");
+    } else {
+      heartIcon.classList.add("unliked");
+      heartIcon.innerHTML = "🤍";
+      removeFromFavourite(product.id);
+      showNotification(`${product.title} remove From Favourite List`);
+    }
+  }
+});
+
 // ------------------------------------------------------ نمایش لیست غذاها در HTML ---------------------------------------------------
 function displayFood(meals) {
   productList.innerHTML = "";
   meals.forEach((meal) => {
     const mealItem = `
-             <div class="product-card">
+             <div class="product-card" data-id="${meal.idMeal}">
+
             <!-- لایک -->
-            <span class="heart-icon">🤍</span>
+            <span class="heart-icon unliked">🤍</span>
 
             <!-- عکس محصول-->
             <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
@@ -324,10 +388,25 @@ function manageAuth() {
     authSection.classList.add("hidden");
   }
 }
+//نمایش نوتیفیکیشن به کاربر
+function showNotification(message, type = "success") {
+  notification.textContent = message;
+  notification.classList.remove("hidden", "error");
+  notification.classList.add("show");
 
+  if (type === "error") {
+    notification.classList.add("error");
+  }
+  setTimeout(() => {
+    notification.classList.remove("show", "error");
+    notification.classList.add("hidden");
+    notification.textContent = "";
+  }, 3000);
+}
 // ------------------------------------------------------ اجرای اولیه-----------------------------------------------
 
 window.addEventListener("load", () => {
   getFetchProduct();
   manageAuth();
+  updateFavoriteList();
 });
