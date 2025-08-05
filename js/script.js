@@ -262,9 +262,7 @@ async function getFetchSearch(query) {
 //  سابمیت فرم جستجو
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
-  const query = document.querySelector("#search-input").value;
-
+  const query = document.querySelector("#search-input").value.trim();
   // اگر ورودی وجود داشت، جستجو کن؛ در غیر این صورت همه غذاها را نمایش بده
   if (query) {
     getFetchSearch(query);
