@@ -8,16 +8,16 @@
     <link rel="icon" type="image/x-icon" href="pic/lgo.ico" />
   </head>
   <body>
-    <!---------------------------------------- هدر ----------------------------------------------------->
+    <!-- ================== هدر سایت ================== -->
 
     <header class="site-header" id="site-header">
       <div class="site-header__content container">
-        <!-- لوگو -->
+        <!-- لوگو سایت -->
         <div class="logo-box">
           <img src="pic/lgo.png" alt="Logo" />
         </div>
 
-        <!-- منوی دسکتاپ -->
+        <!-- منوی ناوبری دسکتاپ -->
         <nav class="nav-desktop" id="main-menu">
           <ul>
             <li>
@@ -30,7 +30,7 @@
           </ul>
         </nav>
 
-        <!-- دکمه‌های ورود و ثبت‌نام -->
+        <!-- دکمه‌های ورود، ثبت‌نام و پروفایل کاربر -->
         <div class="header__auth-buttons">
           <!-- دکمه ثبت نام -->
           <button class="btn--outline" id="btn-signin">
@@ -42,12 +42,14 @@
             <a href="login.html" target="_blank">Log in</a>
           </button>
 
-          <!-- پروفایل -->
+          <!-- بخش نمایش پروفایل کاربر (پس از لاگین) -->
           <div id="user-section">
             <!-- نمایش منوی کاربر لاگین‌شده -->
           </div>
 
+          <!-- آیکون سبد خرید -->
           <button class="btn-cart" id="cart-icon">
+            <!-- آیکون سبد خرید SVG -->
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -66,7 +68,7 @@
           </button>
         </div>
 
-        <!-- دکمه باز کردن منوی برگر -->
+        <!-- دکمه باز کردن منوی برگر (نسخه موبایل) -->
         <div class="nav__burger-toggle">
           <button class="nav__toggle-btn" id="open-menu">
             <svg
@@ -86,6 +88,8 @@
           </button>
         </div>
       </div>
+
+      <!-- فرم جستجو -->
       <div class="header__search container">
         <form id="form" class="form-search">
           <input type="search" id="search-input" placeholder="saerch..." />
@@ -93,12 +97,15 @@
         </form>
         <p id="searchQuery"></p>
       </div>
-      <!-------------------------------------------------- modal -------------------------------------------------->
+
+      <!-- ================== مودال سبد خرید ================== -->
+
       <div class="modal" id="modal">
         <div class="modal-body">
           <div class="modal__header">
             <h2>Shopping Cart</h2>
             <span class="modal-close" id="close-cart">
+              <!-- آیکون بستن مودال -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -128,7 +135,7 @@
                 </tr>
               </thead>
               <tbody id="cart-items">
-                <!-- اینجا ردیف‌های سبد خرید اضافه میشه -->
+                <!-- ردیف‌های سبد خرید اینجا اضافه می‌شوند -->
               </tbody>
             </table>
           </div>
@@ -137,6 +144,7 @@
             <div class="cart-total" id="cart-total"></div>
 
             <button id="checkout-button">
+              <!-- آیکون تکمیل سفارش -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -162,9 +170,9 @@
           </p>
         </div>
       </div>
-      <!---------------------------------------- منوی موبایل ----------------------------------------------------->
+      <!-- ================== منوی موبایل ================== -->
       <nav class="nav--mobile" id="burger-menu">
-        <!-- دکمه بستن منو -->
+        <!-- دکمه بستن منوی موبایل -->
         <button class="nav__toggle-btn" id="close-menu">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -182,13 +190,14 @@
           </svg>
         </button>
 
-        <!-- لیست منو توسط JS وارد می‌شود -->
+        <!-- لیست منوی موبایل (توسط JS اضافه می‌شود) -->
         <ul></ul>
       </nav>
     </header>
 
+    <!-- ================== محتوای اصلی ================== -->
     <main>
-      <!-- تصویر و توضیحات -->
+      <!-- بخش معرفی و تصویر اصلی -->
       <div class="content container">
         <div class="main-content">
           <div class="main-content-heading">
@@ -220,10 +229,10 @@
         </div>
       </div>
 
-      <!--------------------------------------------------  محصولات -------------------------------------------------->
+      <!-- ================== بخش محصولات ================== -->
 
       <div class="products-wrapper container">
-        <!---------------------------------- محصولات براساس منطقه جغرافیایی ---------------------------------------->
+        <!-- فیلتر محصولات بر اساس منطقه -->
         <div class="region-section">
           <h2>Menu</h2>
           <hr />
@@ -249,14 +258,12 @@
           </div>
         </div>
 
-        <!--------------------------------------------------------- لیست محصولات ----------------------------------->
+        <!-- لیست محصولات -->
         <div class="product-list" id="product-list">
-          <!--------------------------------------------------- محصول --------------------------------------------->
-
-          <!-------- نمایش محصولات -------->
+          <!-- محصولات اینجا نمایش داده می‌شوند -->
         </div>
       </div>
-      <!--------------------------------------------------------- لیست علاقه مندی محصولات ---------------------------->
+      <!-- ================== بخش علاقه‌مندی‌ها ================== -->
       <div class="favorites-section container">
         <div class="favourite-list">
           <h3>favourite</h3>
@@ -265,20 +272,22 @@
             <p>"No favorite product has been selected."</p>
           </div>
 
-          <!--------------------------------------------------------محصولات مورد علاقه------------------------->
+          <!-- محصولات مورد علاقه اینجا قرار می‌گیرند -->
           <div class="favourite-products" id="fav-products">
             <!-- محصول موردعلاقه-->
           </div>
         </div>
       </div>
-      <!--------------------------------------------------------- پیام های سبد خرید-نوتیفیکیشن--------------------------->
 
+      <!-- ================== نوتیفیکیشن‌ها ================== -->
       <div id="notification" class="hidden"></div>
     </main>
-    <!---------------------------------------- فوتر----------------------------------------------------->
+
+    <!-- ================== فوتر ================== -->
     <footer>
       <div class="footer-content container">
         <div class="footer-grid">
+          <!-- لوگو و شبکه‌های اجتماعی -->
           <div class="footer-logo-box">
             <div class="footer-logo">
               <img src="pic/lgo.png" alt="" />
@@ -338,6 +347,8 @@
               </li>
             </ul>
           </div>
+
+          <!-- لینک‌های کاربردی -->
           <div class="footer-links">
             <h5>USEFUL LINKS</h5>
             <ul>
@@ -348,6 +359,8 @@
               <li><a href="#">Contact</a></li>
             </ul>
           </div>
+
+          <!-- ساعت کاری -->
           <div class="footer-links">
             <h5>OPENING HOUR</h5>
             <ul>
@@ -359,6 +372,8 @@
         </div>
       </div>
     </footer>
+
+    <!-- دکمه بازگشت به بالا -->
     <button class="scroll-to-top" id="back-to-top">
       <svg
         xmlns="http://www.w3.org/2000/svg"
