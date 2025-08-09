@@ -73,7 +73,6 @@ a {
   font-weight: 400;
 }
 .btn--outline {
-  /* color: var(--color-primary); */
   border: 1px solid var(--color-primary);
   background-color: var(--color-white);
 }
@@ -82,7 +81,6 @@ a {
   display: none;
 }
 .btn--fill {
-  /* color: var(--color-white); */
   background-color: var(--color-primary);
   border: none;
 }
@@ -617,14 +615,17 @@ main {
   cursor: pointer;
 }
 /* جدول مدال */
+.table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
 
 .table-cart {
   width: 100%;
   border: 0.0625rem solid var(--color-border-table-light);
   border-radius: 0.5rem;
-  font-size: 14px;
   border-collapse: collapse;
-  table-layout: fixed;
 }
 .table-cart th,
 .table-cart td {
@@ -958,6 +959,9 @@ footer {
   .product-list,
   .region-filters {
     grid-template-columns: repeat(1, 1fr);
+  }
+  .footer-total {
+    flex-direction: column;
   }
 }
 
