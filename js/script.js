@@ -14,6 +14,7 @@ const searchForm = document.querySelector("#form");
 const searchResultEl = document.querySelector("#searchQuery");
 const authSection = document.querySelector("#user-section");
 const searchInput = document.querySelector("#search-input");
+const backToTopBtn = document.querySelector("#back-to-top");
 
 let mealData = [];
 let FavouriteList = [];
@@ -350,15 +351,16 @@ window.addEventListener("resize", () => {
     burgerMenu.classList.remove("active");
   }
 });
-// ------------------------------------------------------ اسکرول صفحه------------------------------------------------
+// ------------------------------------------------------ اسکرول به بالای صفحه--------------------------------------------------------------
 window.addEventListener("scroll", () => {
   if (window.scrollY > 500) {
-    document.querySelector("#back-to-top").style.display = "block";
+    backToTopBtn.classList.remove("hidden");
   } else {
-    document.querySelector("#back-to-top").style.display = "none";
+    backToTopBtn.classList.add("hidden");
   }
 });
-document.querySelector("#back-to-top").addEventListener("click", () => {
+//دکمه top
+backToTopBtn.addEventListener("click", () => {
   window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 });
 
