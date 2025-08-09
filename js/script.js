@@ -15,9 +15,13 @@ const searchResultEl = document.querySelector("#searchQuery");
 const authSection = document.querySelector("#user-section");
 const searchInput = document.querySelector("#search-input");
 const backToTopBtn = document.querySelector("#back-to-top");
+const cartTotal = document.querySelector("#cart-total");
+const checkoutButton = document.querySelector("#checkout-button");
+const loginReminder = document.querySelector("#login-reminder");
+let mealData = []; // آرایه لیست محصولات
+let FavouriteList = []; //آرایه لیست علاقه مندی ها
+let cart = []; // آرایه‌ی سبد خرید
 
-let mealData = [];
-let FavouriteList = [];
 // ------------------------------------------------------ تابع دریافت غذاها از API ------------------------------------------------------
 async function getFetchProduct() {
   try {
@@ -29,6 +33,7 @@ async function getFetchProduct() {
     // ایجاد ویژگی قیمت
     mealData = data.meals.map((meal) => {
       meal.price = Math.floor(Math.random() * (60 - 5 + 1)) + 5;
+      meal.quantity = 1;
       return meal;
     });
     console.log(mealData);
@@ -151,7 +156,9 @@ function displayFood(meals) {
               <p>${meal.price} $</p>
 
               <!-- سبد خرید -->
-              <button>
+              <button onclick="addToCard('${meal.idMeal}', '${
+      meal.strMeal
+    }', '${meal.price}', '${meal.strMealThumb}', ${meal.quantity})">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -325,6 +332,7 @@ closeMenu.addEventListener("click", () => {
 // ------------------------------------------------------ سبدخرید--------------------------------------------------------------------
 cartIcon.addEventListener("click", () => {
   modal.classList.add("open");
+  displayCartInModal();
 });
 closeCart.addEventListener("click", () => {
   modal.classList.remove("open");
@@ -345,6 +353,137 @@ window.addEventListener("click", (e) => {
     modal.classList.remove("open");
   }
 });
+
+//local storage
+function saveUserCart(cart) {
+  const username = localStorage.getItem("loggedUser");
+  localStorage.setItem(`cart_${username}`, JSON.stringify(cart));
+}
+function loadUserCart() {
+  const username = localStorage.getItem("loggedUser");
+  return JSON.parse(localStorage.getItem(`cart_${username}`)) || [];
+  //وقتی می‌خوای یک مقدار یا نتیجه از تابع بگیری و خارج از تابع استفاده کنی.
+}
+//------------------------------------------------------------قسمت اضافه کردن به سبد خرید---------------------------------------------------
+function addToCard(id, title, price, picture, quantity) {
+  quantity = Number(quantity) || 1; // همیشه عدد میشه، پیش‌فرض 1
+  price = Number(price); // اگه price هم گاهی رشته باشه
+
+  const cart = loadUserCart();
+  const existingProduct = cart.find((p) => p.id === id);
+
+  if (existingProduct) {
+    existingProduct.quantity += quantity;
+  } else {
+    cart.push({ id, title, price, picture, quantity });
+  }
+
+  saveUserCart(cart);
+  updatecart();
+  showNotification(`"${title}" has been added to the cart.`);
+}
+
+//-----------------------------------------------  بروزرسانی و نمایش تعداد آیتم‌های ایکون سبد خرید-----------------------------------------------
+function updatecart() {
+  const cart = loadUserCart();
+  // return cart.reduce((sum, item) => sum + Number(item.quantity), 0);
+  const countCart = cart.reduce((sum, item) => {
+    return sum + Number(item.quantity);
+  }, 0);
+  document.querySelector("#cart-count").textContent = countCart;
+  return countCart;
+}
+// ------------------------------------------------------نمایش جزییات سبد خرید --------------------------------------------------------
+const cartItems = document.querySelector("#cart-items");
+function displayCartInModal() {
+  const cart = loadUserCart();
+  // console.log("سبد خرید", cart);
+  cartItems.innerHTML = "";
+  if (cart.length === 0) {
+    cartItems.innerHTML = `   <tr>
+      <td colspan="6">Your shopping cart is empty.</td>
+    </tr>`;
+    cartTotal.innerHTML = `<h3>Total Amount : 0 $</h3>`;
+    checkoutButton.classList.add("hidden");
+    return;
+  }
+  let total = 0; // مجموع قیمت سبد خرید
+  cart.forEach((item, index) => {
+    // console.log("table ", item);
+    const productItem = `  
+           <tr>
+                <td><img src="${item.picture}" alt="${item.title}"></td>
+                <td>${item.title}</td>
+                <td>${item.price} $</td>
+                <td class="quantity-controls">
+                  <div>
+                    <button onclick="changeQuantity(${index},-1)">-</button>
+                    ${item.quantity} 
+                    <button onclick="changeQuantity(${index},1)">+</button>
+                  </div>
+                </td>
+                <td>${item.price * item.quantity} $</td>
+                <td>
+                  <button class="removeFromCart" onclick="removeFromCart(${index})" >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>`;
+    cartItems.innerHTML += productItem;
+
+    // نمایش مجموع کل قیمت ها
+    total += item.price * item.quantity;
+    cartTotal.innerHTML = `<h3>Total Amount : ${total}$</h3>`;
+
+    // نمایش و عدم نمایش قسمت لاگین در سبد خرید
+    const token = localStorage.getItem("token");
+    if (token) {
+      loginReminder.classList.add("hidden");
+      checkoutButton.classList.remove("hidden");
+    } else {
+      loginReminder.classList.remove("hidden");
+      checkoutButton.classList.add("hidden");
+    }
+  });
+}
+// ------------------------------------------------------افزایش و کاهش تعداد محصول--------------------------------------------------------
+// x=5
+// delta=1
+// x-delta=5-1=4
+// x+delta=5+1=6
+function changeQuantity(index, delta) {
+  const cart = loadUserCart();
+  if (cart[index].quantity + delta > 0) {
+    cart[index].quantity += delta;
+  } else {
+    removeFromCart(index);
+  }
+  saveUserCart(cart);
+  displayCartInModal();
+  updatecart();
+}
+// --------------------------------------------------------------حذف محصول------------------------------------------------------------------
+function removeFromCart(index) {
+  const cart = loadUserCart();
+  cart.splice(index, 1);
+
+  saveUserCart(cart);
+  displayCartInModal();
+  updatecart();
+}
 // ------------------------------------------------------ بستن منو هنگام تغییر سایز صفحه------------------------------------------------
 window.addEventListener("resize", () => {
   if (window.innerWidth > 834) {
@@ -449,4 +588,5 @@ window.addEventListener("load", () => {
   loadFavListFromLocalStorage();
   manageAuth();
   updateFavoriteList();
+  updatecart();
 });
