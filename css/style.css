@@ -963,6 +963,9 @@ footer {
   .footer-total {
     flex-direction: column;
   }
+  .modal-body {
+    width: 90%;
+  }
 }
 
 /* سایز 350 */
