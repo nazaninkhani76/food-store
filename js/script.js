@@ -60,6 +60,7 @@ function loadFavListFromLocalStorage() {
     }
 */
   FavouriteList = JSON.parse(localStorage.getItem("favourite")) || [];
+  updateFavoriteList();
 }
 // add to fav
 function addToFavourite(product) {
@@ -78,7 +79,13 @@ function removeFromFavourite(id) {
 
 // update
 function updateFavoriteList() {
+  const favNote = document.querySelector("#fav-note");
   const favProducts = document.querySelector("#fav-products");
+  if (FavouriteList.length === 0) {
+    favNote.classList.remove("hidden"); // اگر خالی بود، پیام نشان داده شود
+  } else {
+    favNote.classList.add("hidden"); // اگر محصول داشت، پیام مخفی شود
+  }
   favProducts.innerHTML = "";
 
   FavouriteList.forEach((product) => {
@@ -120,6 +127,7 @@ document.addEventListener("click", (e) => {
       removeFromFavourite(product.id);
       showNotification(`${product.title} remove From Favourite List`);
     }
+    updateFavoriteList();
   }
 });
 
