@@ -93,15 +93,15 @@ function updateFavoriteList() {
 // like & unlike
 document.addEventListener("click", (e) => {
   if (e.target.classList.contains("heart-icon")) {
-    console.log("heart icon clicked");
+    // console.log("heart icon clicked");
     const heartIcon = e.target;
-    const productaCard = heartIcon.closest(".product-card");
+    const productCard = heartIcon.closest(".product-card");
     const product = {
-      title: productaCard.querySelector("h3").textContent,
-      image: productaCard.querySelector("img").src,
-      id: productaCard.dataset.id,
+      title: productCard.querySelector("h3").textContent,
+      image: productCard.querySelector("img").src,
+      id: productCard.dataset.id,
     };
-    // console.log(productaCard);
+    // console.log(productCard);
     if (heartIcon.classList.contains("unliked")) {
       heartIcon.classList.remove("unliked");
       heartIcon.innerHTML = "❤️";
@@ -350,6 +350,18 @@ window.addEventListener("resize", () => {
     burgerMenu.classList.remove("active");
   }
 });
+// ------------------------------------------------------ اسکرول صفحه------------------------------------------------
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 500) {
+    document.querySelector("#back-to-top").style.display = "block";
+  } else {
+    document.querySelector("#back-to-top").style.display = "none";
+  }
+});
+document.querySelector("#back-to-top").addEventListener("click", () => {
+  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+});
+
 // ---------------------------------------------------- بررسی وضعیت ورود کاربر و نمایش منو -----------------------------------------------
 function manageAuth() {
   const token = localStorage.getItem("token");
