@@ -1,5 +1,5 @@
-// آدرس API غذاها از سایت themealdb
-const apiUrl = "https://www.themealdb.com/api/json/v1/1/";
+//  تعریف ثابت‌ها و متغیرها (Selectors, API url, state variables)
+const apiUrl = "https://www.themealdb.com/api/json/v1/1/"; // آدرس API غذاها از سایت themealdb
 const notification = document.querySelector("#notification");
 const openMenu = document.querySelector("#open-menu");
 const closeMenu = document.querySelector("#close-menu");
@@ -18,11 +18,63 @@ const backToTopBtn = document.querySelector("#back-to-top");
 const cartTotal = document.querySelector("#cart-total");
 const checkoutButton = document.querySelector("#checkout-button");
 const loginReminder = document.querySelector("#login-reminder");
-let mealData = []; // آرایه لیست محصولات
-let FavouriteList = []; //آرایه لیست علاقه مندی ها
-let cart = []; // آرایه‌ی سبد خرید
+const cartItems = document.querySelector("#cart-items");
 
-// ------------------------------------------------------ تابع دریافت غذاها از API ------------------------------------------------------
+// ============================================================  متغیرهای وضعیت =========================================================
+let mealData = []; // لیست غذاها
+let favouriteList = []; // لیست علاقه‌مندی‌ها
+let cart = []; // سبد خرید
+
+// ============================================================  توابع کمکی ============================================================
+
+//نمایش نوتیفیکیشن به کاربر
+function showNotification(message, type = "success") {
+  notification.textContent = message;
+  notification.classList.remove("hidden", "error");
+  notification.classList.add("show");
+
+  if (type === "error") {
+    notification.classList.add("error");
+  }
+  setTimeout(() => {
+    notification.classList.remove("show", "error");
+    notification.classList.add("hidden");
+    notification.textContent = "";
+  }, 3000);
+}
+
+// محدودیت کاراکتر
+function characterLimit(selector, maxLength) {
+  document.querySelectorAll(selector).forEach((el) => {
+    const fullText = el.textContent.trim();
+    if (fullText.length > maxLength) {
+      el.textContent = fullText.slice(0, maxLength) + "...";
+    }
+  });
+
+  // محدودیت 60 کاراکتر توضیحات محصول
+  // document.querySelectorAll(".product_desc").forEach((p) => {
+  //   const fullText = p.textContent.trim();
+  //   // console.log(fullText.length)
+  //   const maxLength = 50;
+  //   if (fullText.length > maxLength) {
+  //     p.textContent = fullText.slice(0, maxLength) + "...";
+  //   }
+  // });
+
+  // محدودیت 60 کاراکتر عنوان محصول
+  // document.querySelectorAll(".product-title").forEach((p) => {
+  //   const fullText = p.textContent.trim();
+  //   // console.log(fullText.length)
+  //   const maxLength = 30;
+  //   if (fullText.length > maxLength) {
+  //     p.textContent = fullText.slice(0, maxLength) + "...";
+  //   }
+  // });
+}
+
+// ================================================ نمایش غذا) توابع دریافت داده از API) ================================================
+// ------تابع دریافت غذاها از API-------
 async function getFetchProduct() {
   try {
     const response = await fetch(`${apiUrl}search.php?s=`);
@@ -42,100 +94,13 @@ async function getFetchProduct() {
     console.log("Error:", error);
   }
 }
-// ------------------------------------------------------ قسمت علاقه مندی ---------------------------------------------------
-// ذخیره‌سازی در localStorage
-function saveFavListToLocalStorage() {
-  localStorage.setItem("favourite", JSON.stringify(FavouriteList));
-}
 
-// بارگذاری داده‌ها از localStorage
-function loadFavListFromLocalStorage() {
-  /** 
- * const load = localStorage.getItem("favourite");
-    if (load) {
-      users = JSON.parse(load);
-      console.log(result);
-    } else {
-      users = [];
-    }
-*/
-  FavouriteList = JSON.parse(localStorage.getItem("favourite")) || [];
-  updateFavoriteList();
-}
-// add to fav
-function addToFavourite(product) {
-  if (!FavouriteList.some((p) => p.id === product.id)) {
-    FavouriteList.push(product);
-    updateFavoriteList();
-    saveFavListToLocalStorage();
-  }
-}
-// remove from fav
-function removeFromFavourite(id) {
-  FavouriteList = FavouriteList.filter((p) => p.id !== id);
-  updateFavoriteList();
-  saveFavListToLocalStorage();
-}
-
-// update
-function updateFavoriteList() {
-  const favNote = document.querySelector("#fav-note");
-  const favProducts = document.querySelector("#fav-products");
-  if (FavouriteList.length === 0) {
-    favNote.classList.remove("hidden"); // اگر خالی بود، پیام نشان داده شود
-  } else {
-    favNote.classList.add("hidden"); // اگر محصول داشت، پیام مخفی شود
-  }
-  favProducts.innerHTML = "";
-
-  FavouriteList.forEach((product) => {
-    const favItem = `<!-- محصول -->
-            <div class="product-card">
-              <!-- عکس محصول-->
-              <img src="${product.image}" alt="${product.title}" />
-
-              <!-- اسم + توضیحات محصول-->
-              <div class="product-info">
-                <h3 class="product-title">${product.title}</h3>
-              </div>
-            </div>`;
-    favProducts.innerHTML += favItem;
-  });
-  // console.log("لیست علاقه مندی", FavouriteList);
-}
-// like & unlike
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("heart-icon")) {
-    // console.log("heart icon clicked");
-    const heartIcon = e.target;
-    const productCard = heartIcon.closest(".product-card");
-    const product = {
-      title: productCard.querySelector("h3").textContent,
-      image: productCard.querySelector("img").src,
-      id: productCard.dataset.id,
-    };
-    // console.log(productCard);
-    if (heartIcon.classList.contains("unliked")) {
-      heartIcon.classList.remove("unliked");
-      heartIcon.innerHTML = "❤️";
-      addToFavourite(product);
-      showNotification(`${product.title} add to Favourite List`);
-      // showNotification("add to Favourite List");
-    } else {
-      heartIcon.classList.add("unliked");
-      heartIcon.innerHTML = "🤍";
-      removeFromFavourite(product.id);
-      showNotification(`${product.title} remove From Favourite List`);
-    }
-    updateFavoriteList();
-  }
-});
-
-// ------------------------------------------------------ نمایش لیست غذاها در HTML ---------------------------------------------------
+// ===================================================== جزییات توابع نمایش غذا==========================================================
+// -----نمایش لیست غذاها در HTML---------
 function displayFood(meals) {
   productList.innerHTML = "";
   meals.forEach((meal) => {
-    const isFav = FavouriteList.some((p) => p.id === meal.idMeal);
+    const isFav = favouriteList.some((p) => p.id === meal.idMeal);
 
     // تعیین کلاس آیکون لایک/دیسلایک
     const heartIconClass = isFav ? "❤️" : "🤍";
@@ -193,39 +158,9 @@ function displayFood(meals) {
     characterLimit(".product-title", 30);
   });
 }
+// ==========================================منطقه جغرافیایی) سرچ توابع دریافت داده از API) ===========================================
 
-// ------------------------------------------------------ محدودیت  کاراکتر---------------------------------------------------
-
-function characterLimit(selector, maxLength) {
-  document.querySelectorAll(selector).forEach((el) => {
-    const fullText = el.textContent.trim();
-    if (fullText.length > maxLength) {
-      el.textContent = fullText.slice(0, maxLength) + "...";
-    }
-  });
-}
-
-// محدودیت 60 کاراکتر توضیحات محصول
-// document.querySelectorAll(".product_desc").forEach((p) => {
-//   const fullText = p.textContent.trim();
-//   // console.log(fullText.length)
-//   const maxLength = 50;
-//   if (fullText.length > maxLength) {
-//     p.textContent = fullText.slice(0, maxLength) + "...";
-//   }
-// });
-
-// محدودیت 60 کاراکتر عنوان محصول
-// document.querySelectorAll(".product-title").forEach((p) => {
-//   const fullText = p.textContent.trim();
-//   // console.log(fullText.length)
-//   const maxLength = 30;
-//   if (fullText.length > maxLength) {
-//     p.textContent = fullText.slice(0, maxLength) + "...";
-//   }
-// });
-
-// ------------------------------------------------------ دریافت غذا بر اساس منطقه جغرافیایی -------------------------------------------
+//  -----دریافت غذا بر اساس منطقه جغرافیایی------
 async function getFetchProductRegion(value) {
   try {
     const response = await fetch(`${apiUrl}filter.php?a=${value}`);
@@ -262,8 +197,8 @@ document.querySelectorAll(".region-filters div").forEach((btn) => {
     getFetchProductRegion(region);
   });
 });
-
-// ------------------------------------------------------ قسمت سرچ --------------------------------------------------------------------
+// ================================================== سرچ) توابع دریافت داده از API) ===================================================
+//----- قسمت سرچ------
 // تابع جستجو: غذاهایی که نامشان شامل "query" باشد را از API دریافت می‌کند
 async function getFetchSearch(query) {
   try {
@@ -323,21 +258,128 @@ if (searchInput) {
   });
 }
 
-// ------------------------------------------------------ کپی کردن منو --------------------------------------------------------------------
-burgerMenuList.innerHTML = mainMenu.innerHTML;
+// =================================================== localStorage ================================================================
+// علاقه مندی
+function saveFavListToLocalStorage() {
+  localStorage.setItem("favourite", JSON.stringify(favouriteList));
+}
 
-// باز کردن منوی موبایل
-openMenu.addEventListener("click", () => {
-  burgerMenu.classList.add("active");
-  document.body.classList.add("no-scroll"); // اسکرول صفحه غیر فعال می‌شود
+function loadFavListFromLocalStorage() {
+  /** 
+ * const load = localStorage.getItem("favourite");
+    if (load) {
+      users = JSON.parse(load);
+      console.log(result);
+    } else {
+      users = [];
+    }
+*/
+  favouriteList = JSON.parse(localStorage.getItem("favourite")) || [];
+  updateFavoriteList();
+}
+
+// سبدخرید
+function saveUserCart(cart) {
+  const username = localStorage.getItem("loggedUser");
+  localStorage.setItem(`cart_${username}`, JSON.stringify(cart));
+}
+function loadUserCart() {
+  const username = localStorage.getItem("loggedUser");
+  return JSON.parse(localStorage.getItem(`cart_${username}`)) || [];
+  //وقتی می‌خوای یک مقدار یا نتیجه از تابع بگیری و خارج از تابع استفاده کنی.
+}
+// ====================================================== توابع علاقه‌مندی‌ها ===========================================================
+
+// --------- قسمت علاقه مندی ----------
+
+// add to fav
+function addToFavourite(product) {
+  if (!favouriteList.some((p) => p.id === product.id)) {
+    favouriteList.push(product);
+    updateFavoriteList();
+    saveFavListToLocalStorage();
+  }
+}
+// remove from fav
+function removeFromFavourite(id) {
+  favouriteList = favouriteList.filter((p) => p.id !== id);
+  updateFavoriteList();
+  saveFavListToLocalStorage();
+}
+
+// update favoriteList
+function updateFavoriteList() {
+  const favNote = document.querySelector("#fav-note");
+  const favProducts = document.querySelector("#fav-products");
+  if (favouriteList.length === 0) {
+    favNote.classList.remove("hidden"); // اگر خالی بود، پیام نشان داده شود
+  } else {
+    favNote.classList.add("hidden"); // اگر محصول داشت، پیام مخفی شود
+  }
+  favProducts.innerHTML = "";
+
+  favouriteList.forEach((product) => {
+    const favItem = `<!-- محصول -->
+            <div class="product-card">
+              <!-- عکس محصول-->
+              <img src="${product.image}" alt="${product.title}" />
+
+              <!-- اسم + توضیحات محصول-->
+              <div class="product-info">
+                <h3 class="product-title">${product.title}</h3>
+              </div>
+            </div>`;
+    favProducts.innerHTML += favItem;
+  });
+  // console.log("لیست علاقه مندی", favouriteList);
+}
+// like & unlike
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("heart-icon")) {
+    // console.log("heart icon clicked");
+    const heartIcon = e.target;
+    const productCard = heartIcon.closest(".product-card");
+    const product = {
+      title: productCard.querySelector("h3").textContent,
+      image: productCard.querySelector("img").src,
+      id: productCard.dataset.id,
+    };
+    // console.log(productCard);
+    if (heartIcon.classList.contains("unliked")) {
+      heartIcon.classList.remove("unliked");
+      heartIcon.innerHTML = "❤️";
+      addToFavourite(product);
+      showNotification(`${product.title} add to Favourite List`);
+    } else {
+      heartIcon.classList.add("unliked");
+      heartIcon.innerHTML = "🤍";
+      removeFromFavourite(product.id);
+      showNotification(`${product.title} remove From Favourite List`);
+    }
+    updateFavoriteList();
+  }
 });
 
-// بستن منوی موبایل
-closeMenu.addEventListener("click", () => {
-  burgerMenu.classList.remove("active");
-  document.body.classList.remove("no-scroll"); // اسکرول صفحه فعال می‌شود
-});
-// ------------------------------------------------------ سبدخرید--------------------------------------------------------------------
+// ========================================================  توابع سبد خرید ==========================================================
+//--------قسمت اضافه کردن به سبد خرید----------
+function addToCard(id, title, price, picture, quantity) {
+  quantity = Number(quantity) || 1; // همیشه عدد میشه، پیش‌فرض 1
+  price = Number(price); // اگه price هم گاهی رشته باشه
+
+  const cart = loadUserCart();
+  const existingProduct = cart.find((p) => p.id === id);
+
+  if (existingProduct) {
+    existingProduct.quantity += quantity;
+  } else {
+    cart.push({ id, title, price, picture, quantity });
+  }
+
+  saveUserCart(cart);
+  updatecart();
+  showNotification(`"${title}" has been added to the cart.`);
+}
+// ------ سبدخرید----------
 cartIcon.addEventListener("click", () => {
   modal.classList.add("open");
   displayCartInModal();
@@ -362,50 +404,11 @@ window.addEventListener("click", (e) => {
   }
 });
 
-//local storage
-function saveUserCart(cart) {
-  const username = localStorage.getItem("loggedUser");
-  localStorage.setItem(`cart_${username}`, JSON.stringify(cart));
-}
-function loadUserCart() {
-  const username = localStorage.getItem("loggedUser");
-  return JSON.parse(localStorage.getItem(`cart_${username}`)) || [];
-  //وقتی می‌خوای یک مقدار یا نتیجه از تابع بگیری و خارج از تابع استفاده کنی.
-}
-//------------------------------------------------------------قسمت اضافه کردن به سبد خرید---------------------------------------------------
-function addToCard(id, title, price, picture, quantity) {
-  quantity = Number(quantity) || 1; // همیشه عدد میشه، پیش‌فرض 1
-  price = Number(price); // اگه price هم گاهی رشته باشه
-
-  const cart = loadUserCart();
-  const existingProduct = cart.find((p) => p.id === id);
-
-  if (existingProduct) {
-    existingProduct.quantity += quantity;
-  } else {
-    cart.push({ id, title, price, picture, quantity });
-  }
-
-  saveUserCart(cart);
-  updatecart();
-  showNotification(`"${title}" has been added to the cart.`);
-}
-
-//-----------------------------------------------  بروزرسانی و نمایش تعداد آیتم‌های ایکون سبد خرید-----------------------------------------------
-function updatecart() {
-  const cart = loadUserCart();
-  // return cart.reduce((sum, item) => sum + Number(item.quantity), 0);
-  const countCart = cart.reduce((sum, item) => {
-    return sum + Number(item.quantity);
-  }, 0);
-  document.querySelector("#cart-count").textContent = countCart;
-  return countCart;
-}
-// ------------------------------------------------------نمایش جزییات سبد خرید --------------------------------------------------------
-const cartItems = document.querySelector("#cart-items");
+// ======================================================== توابع نمایش جزییات سبدخرید================================================
+// ---------نمایش جزییات سبد خرید -----------
 function displayCartInModal() {
   const cart = loadUserCart();
-  // console.log("سبد خرید", cart);
+  console.log("سبد خرید", cart);
   cartItems.innerHTML = "";
   if (cart.length === 0) {
     cartItems.innerHTML = `   <tr>
@@ -467,7 +470,17 @@ function displayCartInModal() {
     }
   });
 }
-// ------------------------------------------------------افزایش و کاهش تعداد محصول--------------------------------------------------------
+//--------  بروزرسانی و نمایش تعداد آیتم‌های ایکون سبد خرید-------------
+function updatecart() {
+  const cart = loadUserCart();
+  // return cart.reduce((sum, item) => sum + Number(item.quantity), 0);
+  const countCart = cart.reduce((sum, item) => {
+    return sum + Number(item.quantity);
+  }, 0);
+  document.querySelector("#cart-count").innerHTML = countCart;
+  return countCart;
+}
+// ------- افزایش و کاهش تعداد محصول سبد خرید----------
 // x=5
 // delta=1
 // x-delta=5-1=4
@@ -483,7 +496,7 @@ function changeQuantity(index, delta) {
   displayCartInModal();
   updatecart();
 }
-// --------------------------------------------------------------حذف محصول------------------------------------------------------------------
+// --------------- حذف محصول از سبد خرید---------------
 function removeFromCart(index) {
   const cart = loadUserCart();
   cart.splice(index, 1);
@@ -492,13 +505,30 @@ function removeFromCart(index) {
   displayCartInModal();
   updatecart();
 }
-// ------------------------------------------------------ بستن منو هنگام تغییر سایز صفحه------------------------------------------------
+
+// ===================================================== مدیریت رویدادها ===========================================================
+// ---------------- کپی کردن منو ----------------
+burgerMenuList.innerHTML = mainMenu.innerHTML;
+
+// باز کردن منوی موبایل
+openMenu.addEventListener("click", () => {
+  burgerMenu.classList.add("active");
+  document.body.classList.add("no-scroll"); // اسکرول صفحه غیر فعال می‌شود
+});
+
+// بستن منوی موبایل
+closeMenu.addEventListener("click", () => {
+  burgerMenu.classList.remove("active");
+  document.body.classList.remove("no-scroll"); // اسکرول صفحه فعال می‌شود
+});
+
+// ---------- بستن منو هنگام تغییر سایز صفحه-------------
 window.addEventListener("resize", () => {
   if (window.innerWidth > 834) {
     burgerMenu.classList.remove("active");
   }
 });
-// ------------------------------------------------------ اسکرول به بالای صفحه--------------------------------------------------------------
+// --------------- اسکرول به بالای صفحه---------------------
 window.addEventListener("scroll", () => {
   if (window.scrollY > 500) {
     backToTopBtn.classList.remove("hidden");
@@ -511,7 +541,8 @@ backToTopBtn.addEventListener("click", () => {
   window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 });
 
-// ---------------------------------------------------- بررسی وضعیت ورود کاربر و نمایش منو -----------------------------------------------
+// ====================================================== 10. مدیریت وضعیت کاربر ======================================================
+// --------- بررسی وضعیت ورود کاربر و نمایش منو -------------
 function manageAuth() {
   const token = localStorage.getItem("token");
   if (token) {
@@ -574,23 +605,8 @@ function manageAuth() {
     authSection.classList.add("hidden");
   }
 }
-//نمایش نوتیفیکیشن به کاربر
-function showNotification(message, type = "success") {
-  notification.textContent = message;
-  notification.classList.remove("hidden", "error");
-  notification.classList.add("show");
 
-  if (type === "error") {
-    notification.classList.add("error");
-  }
-  setTimeout(() => {
-    notification.classList.remove("show", "error");
-    notification.classList.add("hidden");
-    notification.textContent = "";
-  }, 3000);
-}
-// ------------------------------------------------------ اجرای اولیه-----------------------------------------------
-
+// =========================================================== 11. اجرای اولیه =======================================================
 window.addEventListener("load", () => {
   getFetchProduct();
   loadFavListFromLocalStorage();
