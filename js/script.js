@@ -235,7 +235,10 @@ function debounceSearch(e) {
 }
 
 // لیسنر تایپ
-searchInput.addEventListener("input", debounceSearch);
+searchInput.addEventListener("input", (e) => {
+  debounceSearch(e);
+  document.querySelector("#header__search-overlay").classList.add("overlay");
+});
 // =================== قسمت submit form ==================
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -299,6 +302,7 @@ async function getFetchSearch(query) {
 searchResultsList.addEventListener("click", (e) => {
   const item = e.target.closest(".search-results-item");
   if (!item) return;
+  document.querySelector("#header__search-overlay").classList.remove("overlay");
 
   productList.scrollIntoView({ behavior: "smooth" });
   // searchResultsDropdown.classList.add("hidden");
@@ -448,18 +452,31 @@ window.addEventListener("click", (e) => {
   if (e.target.classList.contains("modal")) {
     modal.classList.remove("open");
   }
+  // بستن dropdown
   if (
     !searchResultsDropdown.contains(e.target) &&
     !searchInput.contains(e.target)
   ) {
     searchResultsDropdown.classList.add("hidden");
   }
+  // خالی کردن input
   if (
     !searchBtn.contains(e.target) &&
     !searchResultsDropdown.contains(e.target) &&
     !searchInput.contains(e.target)
   ) {
     searchInput.value = "";
+  }
+  // overlay
+  if (
+    document.querySelector("#header__search-overlay").contains(e.target) &&
+    !searchBtn.contains(e.target) &&
+    !searchResultsDropdown.contains(e.target) &&
+    !searchInput.contains(e.target)
+  ) {
+    document
+      .querySelector("#header__search-overlay")
+      .classList.remove("overlay");
   }
 });
 // ======================================================== توابع نمایش جزییات سبدخرید================================================
