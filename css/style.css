@@ -190,7 +190,7 @@ a {
 }
 
 /* سرچ */
-.header__search {
+.header-search {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -201,7 +201,7 @@ a {
   z-index: 60; */
 }
 
-.header__search.overlay {
+.header-search.overlay {
   width: 100%;
   background: var(--color-bg-modal);
   width: 100%;

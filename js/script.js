@@ -237,7 +237,7 @@ function debounceSearch(e) {
 // لیسنر تایپ
 searchInput.addEventListener("input", (e) => {
   debounceSearch(e);
-  document.querySelector("#header__search-overlay").classList.add("overlay");
+  document.querySelector("#header-search-overlay").classList.add("overlay");
 });
 // =================== قسمت submit form ==================
 searchForm.addEventListener("submit", (e) => {
@@ -302,7 +302,7 @@ async function getFetchSearch(query) {
 searchResultsList.addEventListener("click", (e) => {
   const item = e.target.closest(".search-results-item");
   if (!item) return;
-  document.querySelector("#header__search-overlay").classList.remove("overlay");
+  document.querySelector("#header-search-overlay").classList.remove("overlay");
 
   productList.scrollIntoView({ behavior: "smooth" });
   // searchResultsDropdown.classList.add("hidden");
@@ -469,13 +469,13 @@ window.addEventListener("click", (e) => {
   }
   // overlay
   if (
-    document.querySelector("#header__search-overlay").contains(e.target) &&
+    document.querySelector("#header-search-overlay").contains(e.target) &&
     !searchBtn.contains(e.target) &&
     !searchResultsDropdown.contains(e.target) &&
     !searchInput.contains(e.target)
   ) {
     document
-      .querySelector("#header__search-overlay")
+      .querySelector("#header-search-overlay")
       .classList.remove("overlay");
   }
 });
