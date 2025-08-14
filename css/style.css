@@ -1075,7 +1075,7 @@ footer {
     grid-template-columns: repeat(1, 1fr);
   }
   .search-results-dropdown {
-    grid-template-columns: repeat(1, 1fr); /* یک ستون کامل */
+    grid-template-columns: repeat(2, 1fr);
   }
   .footer-total {
     flex-direction: column;
