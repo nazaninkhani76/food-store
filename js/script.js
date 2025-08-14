@@ -19,6 +19,9 @@ const cartTotal = document.querySelector("#cart-total");
 const checkoutButton = document.querySelector("#checkout-button");
 const loginReminder = document.querySelector("#login-reminder");
 const cartItems = document.querySelector("#cart-items");
+const searchResultsDropdown = document.querySelector("#search-results");
+const searchResultsList = document.querySelector("#search-results-list");
+const searchBtn = document.querySelector("#search-btn");
 
 // ============================================================  متغیرهای وضعیت =========================================================
 let mealData = []; // لیست غذاها
@@ -198,66 +201,109 @@ document.querySelectorAll(".region-filters div").forEach((btn) => {
   });
 });
 // ================================================== سرچ) توابع دریافت داده از API) ===================================================
-//----- قسمت سرچ------
-// تابع جستجو: غذاهایی که نامشان شامل "query" باشد را از API دریافت می‌کند
-async function getFetchSearch(query) {
-  try {
-    const response = await fetch(`${apiUrl}search.php?s=${query}`);
-    if (!response.ok) {
-      throw new Error(`HTTP ERROR! Status:${response.status}`);
-    }
+// =======================  تابع Debounce =======================
+let timer;
+function debounceSearch(e) {
+  const query = e.target.value.trim();
 
-    const data = await response.json();
-    // console.log(data);
+  clearTimeout(timer); // هر بار تایپ، تایمر قبلی رو لغو کن
 
-    // اگر غذایی با این نام وجود نداشت، پیام نمایش داده شود
-    if (!data.meals) {
-      // searchResultEl.style.display = "block";
-      searchResultEl.classList.add("show");
-      searchResultEl.textContent = `No products found for "${query}"`;
-      return;
-    }
-
-    // پاک کردن پیام قبلی (در صورت وجود)
-    searchResultEl.textContent = "";
-
-    // افزودن قیمت تصادفی به هر غذا
-    mealData = data.meals.map((meal) => {
-      meal.price = Math.floor(Math.random() * (60 - 5 + 1)) + 5;
-      return meal;
-    });
-
-    console.log(mealData);
-
-    // نمایش غذاها در صفحه
-    displayFood(mealData);
-  } catch (error) {
-    console.log("Error:", error);
+  if (query === "") {
+    // اگر خالی بود، همه چیز رو جمع کن
+    searchResultsDropdown.classList.add("hidden");
+    searchResultsList.innerHTML = "";
+    searchResultEl.classList.remove("show");
+    searchResultEl.innerHTML = "";
+    return;
   }
+
+  // نشان دادن لودینگ
+  searchResultsDropdown.classList.remove("hidden");
+  searchResultsList.innerHTML = "";
+  searchResultsList.style.display = "none";
+  searchResultEl.classList.add("show");
+  searchResultEl.innerHTML = `<div class="loading">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+</svg>  <p>Loading…</p>
+</div>`;
+
+  // بعد از 300ms مکث، سرچ کن
+  timer = setTimeout(() => {
+    getFetchSearch(query);
+  }, 300);
 }
 
-//  سابمیت فرم جستجو
+// لیسنر تایپ
+searchInput.addEventListener("input", debounceSearch);
+// =================== قسمت submit form ==================
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const query = document.querySelector("#search-input").value.trim();
-  // اگر ورودی وجود داشت، جستجو کن؛ در غیر این صورت همه غذاها را نمایش بده
+  const query = searchInput.value.trim();
+  searchResultsDropdown.classList.add("hidden");
+
   if (query) {
     getFetchSearch(query);
   } else {
     getFetchProduct();
   }
 });
+// ======================= search API=======================
 
-// اگر کاربر فیلد سرچ را خالی کرد، پیام خطا پاک شود
-if (searchInput) {
-  searchInput.addEventListener("input", () => {
-    if (searchInput.value.trim() === "") {
-      searchResultEl.textContent = "";
-      searchResultEl.classList.remove("show");
+async function getFetchSearch(query) {
+  try {
+    const response = await fetch(`${apiUrl}search.php?s=${query}`);
+    if (!response.ok) throw new Error(`HTTP ERROR! Status: ${response.status}`);
+
+    const data = await response.json();
+
+    if (!data.meals) {
+      searchResultsList.innerHTML = "";
+      searchResultEl.classList.add("show");
+      searchResultEl.innerHTML = `<p>No results found</p>`;
+      return;
     }
-  });
-}
+    searchResultEl.classList.remove("show");
+    searchResultsList.style.display = "grid";
 
+    // تعریف یک متغیر خالی برای جمع‌آوری آیتم‌ها
+    let itemsHTML = "";
+
+    // ساخت آیتم‌ها با forEach
+    data.meals.slice(0, 5).forEach((meal) => {
+      itemsHTML += `
+     
+    <div class="search-results-item">
+      <div>
+        <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
+      </div>
+      <p>${meal.strMeal}</p>
+    </div>
+  `;
+    });
+
+    // یک بار اضافه کردن همه آیتم‌ها
+    searchResultsList.innerHTML = itemsHTML;
+    searchResultsDropdown.classList.remove("hidden");
+    searchResultsList.style.display = "grid";
+
+    searchResultEl.innerHTML = "";
+    searchResultEl.classList.remove("show");
+  } catch (error) {
+    searchResultEl.classList.add("show");
+    searchResultEl.innerHTML = `<p>Error fetching results</p>`;
+    console.log("Error:", error);
+  }
+}
+// اسکرول به لیست محصولات
+searchResultsList.addEventListener("click", (e) => {
+  const item = e.target.closest(".search-results-item");
+  if (!item) return;
+
+  productList.scrollIntoView({ behavior: "smooth" });
+  // searchResultsDropdown.classList.add("hidden");
+  // searchInput.value = "";
+});
 // =================================================== localStorage ================================================================
 // علاقه مندی
 function saveFavListToLocalStorage() {
@@ -402,8 +448,20 @@ window.addEventListener("click", (e) => {
   if (e.target.classList.contains("modal")) {
     modal.classList.remove("open");
   }
+  if (
+    !searchResultsDropdown.contains(e.target) &&
+    !searchInput.contains(e.target)
+  ) {
+    searchResultsDropdown.classList.add("hidden");
+  }
+  if (
+    !searchBtn.contains(e.target) &&
+    !searchResultsDropdown.contains(e.target) &&
+    !searchInput.contains(e.target)
+  ) {
+    searchInput.value = "";
+  }
 });
-
 // ======================================================== توابع نمایش جزییات سبدخرید================================================
 // ---------نمایش جزییات سبد خرید -----------
 function displayCartInModal() {

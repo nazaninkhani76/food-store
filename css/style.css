@@ -196,6 +196,9 @@ a {
   justify-content: center;
   width: 100%;
   flex-direction: column;
+
+  /* position: relative;
+  z-index: 60; */
 }
 .form-search {
   width: 100%;
@@ -230,15 +233,110 @@ a {
   transition: all 1s ease;
 }
 #searchQuery {
-  background-color: var(--color-bg-soft-yellow);
   padding: 12px;
   margin: auto;
   text-align: center;
   font-weight: 600;
   display: none;
 }
+#searchQuery p {
+  text-align: center;
+}
 #searchQuery.show {
   display: block;
+}
+
+.search-wrap {
+  width: 100%;
+  min-width: 80%;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  gap: 10px;
+  position: relative;
+}
+.search-results {
+  width: 100%;
+  background-color: var(--color-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--color-bg-lighter);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 70px;
+  z-index: 60;
+  max-height: 400px;
+  flex-direction: column;
+  /* overflow: auto; */
+}
+
+.search-results.hidden {
+  display: none;
+}
+.search-results-dropdown {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  padding: 10px 20px;
+  gap: 10px;
+  max-height: 320px;
+  overflow: auto;
+  margin: 10px;
+}
+
+.search-results-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  padding-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid var(--color-bg-lighter);
+  cursor: pointer;
+}
+.search-results-item:hover {
+  background: var(--color-bg-search);
+  transform: scale(0.98);
+}
+.search-results-item img {
+  width: 100%;
+  object-fit: cover;
+}
+.search-results p {
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 10px;
+  text-align: left;
+  font-weight: 500;
+}
+/* انیمیشن لود جستجو */
+.loading {
+  padding: 10px 12px;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loading svg {
+  width: 40px;
+  height: 40px;
+  animation: load 0.5s linear infinite;
+}
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 /* main */
 
@@ -958,6 +1056,9 @@ footer {
   .footer-links {
     order: 1;
   }
+  .search-results-dropdown {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 /* سایز 900 */
 @media screen and (max-width: 900px) {
@@ -973,6 +1074,9 @@ footer {
   .product-list,
   .region-filters {
     grid-template-columns: repeat(1, 1fr);
+  }
+  .search-results-dropdown {
+    grid-template-columns: 1fr; /* یک ستون کامل */
   }
   .footer-total {
     flex-direction: column;
